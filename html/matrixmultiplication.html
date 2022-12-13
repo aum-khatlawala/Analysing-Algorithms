@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+<head>
+    <title>Matrix Multiplication</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Matrix Multiplication</a>
+        <a href="towerofhanoi.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="huffmanencoding.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Huffman
+            Encoding</a>
+        <a href="hornformulas.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="editdistance.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="eggdropping.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Egg Dropping
+            Puzzle</a>
+        <a href="cryptography.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Basics of
+            Cryptography</a>
+        <a href="machinelearning.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Machine
+            Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <h1>
+            My interpretation and analysis of the algorithm:
+        </h1>
+        <p>
+            If we have two 2×2 matrices \(X\) and \(Y\) and we wish to multiply them, we would do it as follows:
+            \[X = \begin{bmatrix} A & B \\ C & D \end{bmatrix}, Y = \begin{bmatrix} E & F \\ G & H \end{bmatrix}\] <br>
+            \[XY =
+            \begin{bmatrix} A & B \\ C & D \end{bmatrix}\begin{bmatrix} E & F \\ G & H \end{bmatrix} = \begin{bmatrix}
+            AE+BG & AF+BH \\ CE+DG & CF+DH \end{bmatrix}\]
+            This would be easy for a human brain to compute but would be considered a naive solution when it comes to
+            algorithms because it would have a time complexity of \(O(n^3)\). Why? Because there are \(n^2\) entries to
+            be computed and each takes \(O(n)\) time. A more precise explanation for this is as follows:<br>
+            we get 8 \(n/2\) sized products: \(AE, BG, AF, BH, CE, DG, CF\) and \(DH\). So the total running time can be
+            calculated as follows:<br>
+            \(T(n) = 8T(n/2) + O(n^2)\), which turns out to be \(O(n^3)\).
+        </p>
+        <p>
+            However, using Strassen's Divide and Conquer Algorithm, the total time complexity has been proven to be
+            reduced to \(O(n^{\log 7})\) which is equal to \(O(n^{2.81})\). Here, \(n\) is the dimension of the square
+            matrices we are multiplying.
+        </p>
+        <p>
+            Strassen was able to reduce the eight computation products (for \(n\)=2) to seven using a trick which is so
+            precise that it makes us wonder how he ever discovered it in the first place. He listed the decomposition as
+            follows:
+            \[XY = \begin{bmatrix} P_5+P_4-P_2+P_6 & P_1+P_2 \\ P_3+P_4 & P_1+P_5-P_3-P_7 \end{bmatrix}\] \[ P_1 =
+            A(F-H)\]\[P_2=(A+B)H\]\[P_3=(C+D)E\]\[P_4=D(G-E)\]\[P_5=(A+D)(E+H)\]\[P_6=(B-D)(G+H)\]\[P_7=(A-C)(E+F)\]
+        </p>
+        <p>
+            Thus, for 7 computations, running time is \(T(n) = 7T(n/2)+O(n^2)\). This equals \(O(n^{\log 7})\) which is
+            approximately equal to \(O(n^{2.81})\).
+        </p>
+        <p>
+            Recently, however, a Refined Laser Method was introduced by Alman and Williams to further reduce the
+            complexity of Matrix Multiplication to \(O(n^{2.3728596})\). This shows us that this algorithm has been
+            evolving for quite some time and we still haven't found the perfect optimum solution for it.
+        </p>
+        <p>
+            The code:
+        <pre>
+                <code>
+int main()
+{
+    int X[2][2], Y[2][2], XY[2][2];
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            scanf("%d", &X[i][j]);
+        }
+    }
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            scanf("%d", &Y[i][j]);
+        }
+    }
+    int A = X[0][0];
+    int B = X[0][1];
+    int C = X[1][0];
+    int D = X[1][1];
+    int E = Y[0][0];
+    int F = Y[0][1];
+    int G = Y[1][0];
+    int H = Y[1][1];
+    int P_1 = A * (F - H);
+    int P_2 = (A + B) * H;
+    int P_3 = (C + D) * E;
+    int P_4 = D * (G - E);
+    int P_5 = (A + D) * (E + H);
+    int P_6 = (B - D) * (G + H);
+    int P_7 = (A - C) * (E + F);
+    XY[0][0] = P_5 + P_4 - P_2 + P_6;
+    XY[0][1] = P_1 + P_2;
+    XY[1][0] = P_3 + P_4;
+    XY[1][1] = P_1 + P_5 - P_3 - P_7;
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            printf("%d ", XY[i][j]);
+        }
+        printf("\n");
+    }
+}
+                </code>
+                </pre>
+        </p>
+        <h1>
+            Applications in different fields:
+        </h1>
+        <p>
+            The most basic application is in the subject of Linear Algebra. Matrix Multiplication forms the basis of
+            Linear
+            Algebra calculations (Linear maps, Eigenvectors, Inner products and so on) and the fact that Linear Algebra
+            is
+            such a fundamental concept in multiple fields in Computer Science such as graphics, machine learning,
+            computer
+            vision, cryptography and quantum algorithms makes it even more important to search for the best possible
+            algorithm to solve matrix multiplication.
+        </p>
+        <p>
+            Another important advantage of matrix multiplication is that it can model essentially any linear system of
+            equations. Now, linear equations are used extensively in and are critical to multiple fields including
+            Modern
+            Physics and Chemistry. Let's take a few examples:
+        <ol>
+            <li>
+                If we need to find the magnitude of magnetic field described by a matrix at some point in space
+                described by
+                another matrix, we just need to multiply the magnetic field by the geographic matrix.
+            </li>
+            <li>
+                If we want to build a search engine using a sparse matrix (mostly consisting of 0s) of websites and how
+                they
+                connect together, we can use the power iteration algorithm (given a diagonalizable matrix \(A\), the
+                algorithm will produce a number \(\lambda\) , which is the greatest (in absolute value) eigenvalue of
+                \(A\))
+                to accomplish the task. This is exactly what led to the foundation of Google.
+            </li>
+            <li>
+                The mechanism of self driving cars is based on the concept of neural networks in the computer vision
+                system
+                and this relies on real time matrix multiplication done by GPUs.
+            </li>
+        </ol>
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

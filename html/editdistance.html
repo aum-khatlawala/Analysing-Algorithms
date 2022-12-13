@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+<head>
+    <title>Edit Distance</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="matrixmultiplication.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Matrix
+            Multiplication</a>
+        <a href="towerofhanoi.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="huffmanencoding.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Huffman
+            Encoding</a>
+        <a href="hornformulas.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="eggdropping.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Egg Dropping
+            Puzzle</a>
+        <a href="cryptography.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Basics of
+            Cryptography</a>
+        <a href="machinelearning.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Machine
+            Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <h1>
+            My interpretation and analysis of the algorithm:
+        </h1>
+        <p>
+            This algorithm deals with the problem of the closeness of two strings. Now, a good measure of closeness of
+            two strings is the extent to which they can be aligned. So, the edit distance problem deals with the
+            question – how many minimum edits (insertions, deletions and substitutions / conversions) are required to
+            convert one
+            word to another. Let’s take an example. To convert the word "Saturday" to "Sunday", we need 3 minimum edits.
+            This
+            can be visualised as follows:
+            \[SATURDAY\]
+            \[S--UNDAY\]
+            So, we delete \(A\) and \(T\) and convert \(R\) to \(N\) to get "Sunday" from "Saturday".
+        </p>
+        <p>
+            We could easily identify the optimal answer in this case, however, there could be multiple non optimal ways
+            to reach the answer. How do we write an algorithm for the minimum answer? Based on the example, we can say
+            that the problem boils down to finding the best alignment for the two words given and then finding how many
+            places the letters don’t match in. We can also observe that the two properties required for the Dynamic
+            Programming Approach are satisfied for this kind of a problem:
+        <ol>
+            <li>
+                Overlapping Subproblems Property: solutions of the same subproblems are needed again and again. This can
+                observed if we try to write a recursive algorithm to solve this. This is because we can reach the same
+                subproblem from two different tree paths while writing the recursive algorithm to solve this.
+            </li>
+            <li>
+                Optimal Substructure Property: optimal solution of the given problem can be obtained by using optimal
+                solutions of its subproblems. How? This is what we shall understand now.
+            </li>
+        </ol>
+        </p>
+        <p> We want to find the edit distance between two strings \(x\) (with length \(m\)) and \(y\) (with length
+            \(n\)). The
+            subproblem
+            can be to find edit distance between some prefix of the first string and some prefix of the second string.
+            This
+            can be written as \(E(i, j)\) where the prefix for the first string is \(x[1...i]\) and the prefix for the
+            second
+            string
+            is \(y[1...j]\). If we keep finding the answers to such subproblems, we end up with our final answer \(E(m,
+            n)\).
+        </p>
+        <p>
+            Let’s provide the intuition to solve the \(E(i, j)\) subproblem. There are three possible cases:
+        <ol>
+            <li>The \(i^{th}\) letter of the first string is aligned with a dash.</li>
+            <li>A dash is aligned with the \(j^{th}\) letter of the second string. </li>
+            <li>The \(i^{th}\) letter of the first string is aligned with the jth letter of the second string. </li>
+        </ol>
+        </p>
+        <p>
+            We can express \(E(i, j)\) in terms of smaller subproblems. <br>
+            \(E(i, j) = \min \{ 1 + E(i − 1, j), 1 + E(i, j − 1), diff(i, j) + E(i − 1, j − 1) \}\). <br>
+            This might look like a gigantic complicated formula, but it is rather simple to understand. <br>
+            The minimum edit distance for the subproblem is equal to the minimum out of the three where \(1 + E(i − 1,
+            j)\)
+            is
+            for the first case (we need to find minimum distance for the smaller subproblem \(E(i-1, j)\) and add 1 to
+            it
+            because the \(i^{th}\) letter of the first string is aligned with a dash indicating a mismatch), \(1 + E(i,
+            j − 1)\) is
+            for
+            the second case (we need to find minimum distance for the smaller subproblem \(E(i, j - 1)\) and add 1 to it
+            because the \(j^{th}\) letter of the second string is aligned with a dash indicating a mismatch) and
+            \(diff(i, j) +
+            E(i − 1, j − 1)\) is for the
+            third case (we need to find minimum distance for the smaller subproblem \(E(i - 1, j-1)\) and add 1 if the
+            \(i^{th}\)
+            and \(j^{th}\) letter of the respective strings aren't the same and add 0 if the \(i^{th}\) and \(j^{th}\)
+            letter of the
+            respective strings are the same).
+        </p>
+        <p>
+            Now, we only need to decide the base cases. \(E(0, j)\) is the edit distance between the 0-length prefix of
+            \(x\),
+            namely the empty string, and the first \(j\) letters of \(y\): clearly, \(j\). And similarly, \(E(i, 0) =
+            i\).
+        </p>
+        <p>
+            The structure of the code:
+        <pre>
+                <code>
+int editdistance(const char *word1, int m, const char *word2, int n)
+{
+    int E[m + 1][n + 1];
+    for (int i = 0; i <= m; i++)
+    {
+        E[i][0] = i;
+    }
+    for (int j = 0; j <= n; j++)
+    {
+        E[0][j] = j;
+    }
+    for (int i = 0; i <= m; i++)
+    {
+        for (int j = 0; j <= n; j++)
+        {
+            // E(i, j) = min{E(i − 1, j) + 1, E(i, j − 1) + 1, E(i − 1, j − 1) + diff(i, j)}
+        }
+    };
+    return E[m][n];
+}
+                </code>
+                </pre>
+        </p>
+        <h1>
+            Applications in different fields:
+        </h1>
+        <p>
+            Computers have become such an important tool for studying human and other animals' genes that computational
+            genomics has become a new field in itself. Here are some examples of common questions that arise in this
+            realm:
+        <ol>
+            <li>
+                When a new gene is discovered, one way to learn more about its function is to look for known genes that
+                are similar to it. This is especially useful for transferring knowledge from well-studied species, such
+                as mice, to humans. The basic idea of the search problem is to see how closely two gene strings match. A
+                generalisation of edit distance and Dynamic Programming can be used to effectively compute it. There is
+                also another problem of searching through gene databases like GenBank. This is done using methods like
+                BLAST, which is a combination of algorithmic tricks like the ones used in edit distance and biological
+                concepts. This has led to it being the most widely used computational biology software.
+            </li>
+            <li>
+                DNA sequencing methods include DP algorithms as the fragment sizes are around 500-700 characters long
+                (with the property of Overlapping Subproblem) and they need to be assembled into a coherent DNA sequence
+                of billions of these.
+            </li>
+            <li>
+                The concept of phylogenetic tree and its computation methods (after gene sequencing) is also something
+                that can be solved using computational biology softwares.
+            </li>
+        </ol>
+        </p>
+        <p>
+            Edit Distance is also used in finding out how similar a set of DNA / protein sequences are and this forms
+            the basis of methods like UPGMA which find the phylogenetic relationship between different species.
+        </p>
+        <p>
+            Autocorrection models can also be improved using the algorithm for Edit Distance.
+        </p>
+        <p>
+            Approximate string matching, where the objective is to find matches for short strings in many longer texts,
+            also uses edit distance.
+        </p>
+        <p>
+            Hirschberg's algorithm uses the concept of minimising edit distance to compute the optimum alignment of two
+            strings.
+        </p>
+        <p>
+            Levenshtein automata are finite state machines that recognize a set of strings within bounded edit distance
+            of a fixed reference string.
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+<head>
+    <title>Huffman Encoding</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="matrixmultiplication.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Matrix
+            Multiplication</a>
+        <a href="towerofhanoi.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Huffman Encoding</a>
+        <a href="hornformulas.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="editdistance.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="eggdropping.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Egg Dropping
+            Puzzle</a>
+        <a href="cryptography.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Basics of
+            Cryptography</a>
+        <a href="machinelearning.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Machine
+            Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <h1>
+            My interpretation and analysis of the algorithm:
+        </h1>
+        <p>
+            Huffman Encoding answers the question – what is the most economical way to encode a given long string in
+            binary.
+        </p>
+        <p>
+            Let’s take an example: We want to encode a 120 million character string made up of the alphabets \(A, B, C,
+            D,
+            E, F, G \ and \ H\). The traditional approach to encode this in binary would be to assign a two bit binary
+            number
+            to each alphabet (\(A ⇒ 000, \ B ⇒ 001, \ C ⇒ 010 \ and \ D ⇒ 011, \ E ⇒ 100, \ F ⇒ 101, \ G ⇒ 110 \ and \ H
+            ⇒ 111\)) and encode
+            it to give us a total length of 360 million bits. Now, there must be a way to encode it better. How do we do
+            it? Huffman Encoding is the answer. We try to do variable length encoding based on how frequently each
+            alphabet appears in the string.
+        </p>
+        <p>
+            Let’s say the frequency of occurrence of each bit is as follows:
+        <div style="overflow-x:auto;" class="achiev">
+            <center>
+                <table>
+                    <tr>
+                        <th>Alphabet</th>
+                        <th>Frequency</th>
+                    </tr>
+                    <tr>
+                        <td>\(A\)</td>
+                        <td>24 million</td>
+                    </tr>
+                    <tr>
+                        <td>\(B\)</td>
+                        <td>45 million</td>
+                    </tr>
+                    <tr>
+                        <td>\(C\)</td>
+                        <td> 3 million</td>
+                    </tr>
+                    <tr>
+                        <td>\(D\)</td>
+                        <td>3 million</td>
+                    </tr>
+                    <tr>
+                        <td>\(E\)</td>
+                        <td>23 million</td>
+                    </tr>
+                    <tr>
+                        <td>\(F\)</td>
+                        <td>4 million</td>
+                    </tr>
+                    <tr>
+                        <td>\(G\)</td>
+                        <td>8 million</td>
+                    </tr>
+                    <tr>
+                        <td>\(H\)</td>
+                        <td>8 million</td>
+                    </tr>
+                </table>
+            </center>
+        </div>
+        </p>
+        <p>
+            Now, the Huffman Encoding algorithm tells us to proceed as follows to achieve variable length encoding of
+            the string.
+        <ol>
+            <li>
+                Build a priority queue that contains 8 nodes where each node represents the root of a tree with single
+                node.
+            </li>
+            <li>
+                Extract two minimum frequency nodes (\(C\) ⇒ 3 million and \(F\) ⇒ 4 million) from the queue and add a
+                new
+                internal node with frequency 7 million.
+            </li>
+            <li>
+                Extract two minimum frequency nodes (\(D\) ⇒ 5 million and \((C+F)\) ⇒ 7 million) and add a new internal
+                node
+                with frequency 12 million.
+            </li>
+            <li>
+                Extract two minimum frequency nodes (\(G\) ⇒ 8 million and \(H\) ⇒ 8 million) from the queue and add a
+                new
+                internal node with frequency 16 million.
+            </li>
+            <li>
+                Extract two minimum frequency nodes (\((D+(C+F))\) ⇒ 12 million and \((G+H)\) ⇒ 16 million) and add a
+                new
+                internal node with frequency 28 million.
+            </li>
+            <li>
+                Extract two minimum frequency nodes (\(E\) ⇒ 23 million and \(A\) ⇒ 24 million) from the queue and add a
+                new
+                internal node with frequency 47 million.
+            </li>
+            <li>
+                Extract two minimum frequency nodes (\(((D+(C+F))+(G+H))\) ⇒ 28 million and \(B\) ⇒ 45 million) and add
+                a new
+                internal node with frequency 73 million.
+            </li>
+            <li>
+                Extract two minimum frequency nodes (\((E+A)\) ⇒ 47 million and \((((D+(C+F))+(G+H))+B)\) ⇒ 73 million)
+                and add
+                a new internal node with frequency 120 million.
+            </li>
+        </ol>
+        </p>
+        <p>
+            After performing these steps, the Huffman Tree will look as follows (Note: all frequency numbers are in
+            millions):     
+            <center> <img src="../img/huffmantree.png" style="  text-align: center;" width="759"></center>
+        </p>
+        <p>
+            Thus, we have done a variable length encoding of the 120 million character string using Huffman Encoding.
+            Now we see whether this actually provides an improvement on the total amount of bits required to encode.
+            With the normal encoding scheme, we were able to encode the string in 360 million bits. Now, for Huffman
+            Encoding, we get the total cost of the tree as follows – the sum from \(i=1\) to \(i=n\) of (frequency of
+            \(i^{th}\) symbol
+            × depth of \(i^{th}\) symbol in tree). Here, the calculation for that is as follows –
+            (2×23)+(2×24)+(2×45)+(4×5)+(5×3)+(5×4)+(4×8)+(4×8) = 303 million bits. This is a 16% improvement on the
+            encoding length.
+        </p>
+        <p>
+            Now, let’s have a look at how the two Greedy Approach Properties are satisfied in this algorithm:
+        <ol>
+            <li>
+                Greedy Choice Property – The two symbols with the smallest frequencies must be at the bottom of the
+                optimal tree, as children of the lowest internal node. Why? It's simple. Because otherwise, swapping
+                these two symbols with whatever is lowest in the tree would improve encoding.
+            </li>
+            <li>
+                Optimum Substructure Property – Define the frequency of any internal node to be the sum of the
+                frequencies of its descendant leaves. The cost of a tree is the sum of the frequencies of all leaves and
+                internal nodes except the root. Any tree in which \(f_1\) and \(f_2\) are sibling leaves has cost
+                \((f_1+f_2)\) plus the
+                cost for a tree with \((n−1)\) leaves of frequencies \((f_1+f_2), f_3, f_4 … f_n\). Using the greedy
+                choice statement
+                and applying it recursively, we affirm the optimum substructure property. Essentially, in every
+                iteration, we remove the bottom two leaves and combine their frequencies to form the node which is their
+                parent at \((n−1)\) level.
+            </li>
+        </ol>
+        </p>
+        <p>
+            The structure of the code:
+        <pre>
+                <code>
+void huffman_encoding(int f[])
+{
+    int n = sizeof(f);
+    // f is an array of frequencies
+    // Let H be a priority queue of integers ordered by f
+    for (int i = 1; i <= n; i++)
+    {
+        // insert(H, i)
+    }
+    for (int k = n + 1; k <= 2 * n - 1; k++)
+    {
+        // i = deletemin(H), j = deletemin(H)
+        // create a node numbered k with children i, j
+        // f[k] = f[i] + f[j]
+        // insert(H, k)
+    }
+    // return Huffman tree
+};
+                </code>
+                </pre>
+        </p>
+        <p>
+            The time complexity of the Huffman algorithm is \(O(n \log n)\). Using a heap to store the weight of each
+            tree,
+            each iteration requires \(O(\log n)\) time to determine the cheapest weight and insert the new weight. There
+            are \(O(n)\) iterations, one for each item.
+        </p>
+        <h1>
+            Applications in different fields:
+        </h1>
+        <p>
+            It is easy to imagine the potential use cases of Huffman encoding. Let's try to list down some generic real
+            life applications of encoding a piece of information.
+        <ol>
+            <li>
+                Data compression: This is a very common use case of encoding which is used by the whole world in this
+                day and age.
+                <ul>
+                    <li>
+                        Audio and video streaming / uploading is only possible due to compression techniques like
+                        mp3, jpeg, mpeg4 and so on.
+                    </li>
+                    <li>
+                        Large pieces of data can easily be stored and transferred in computer networks using processes
+                        like ZIPing files and RARing files. These are a result of encoding data.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                The concept of barcodes and QR codes is possible only due to the process of encoding. It allows us to
+                easily access data that we might need instead of performing manual operations to access that chunk of
+                data.
+            </li>
+            <li>
+                Encoding standards like ASCII and UTF help encode computer understandable formats to human readable
+                characters for making computer data human readable. Emojis are also a result of such encoding and
+                decoding protocols.
+            </li>
+            <li>
+                Multiple different types of codes like morse code and gray code use digital encoding and were popular in
+                the last century.
+            </li>
+        </ol>
+        </p>
+        <p>
+            Huffman encoding, as proven during the course of this article, is more efficient than a lot of the standard
+            encoding methods and for this reason, it is used often when it comes to any type of encoding. GZIP, JPEG and
+            PNG formats heavily use Huffman encoding.
+        </p>
+        <p>
+            Multiple communications with and from the internet are Huffman encoded at some point. Multiple communication
+            protocols use it.
+        </p>
+        <p>
+            Huffman encoding, combined with Dynamic Programming, also serves as the basis of lossless compression
+            algorithms like Brotli Compression (released by Google).
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

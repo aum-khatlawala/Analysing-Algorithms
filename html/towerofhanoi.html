@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+<head>
+    <title>Tower of Hanoi</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="matrixmultiplication.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Matrix
+            Multiplication</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="huffmanencoding.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Huffman
+            Encoding</a>
+        <a href="hornformulas.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="editdistance.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="eggdropping.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Egg Dropping
+            Puzzle</a>
+        <a href="cryptography.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Basics of
+            Cryptography</a>
+        <a href="machinelearning.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Machine
+            Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <h1>
+            My interpretation and analysis of the algorithm:
+        </h1>
+        <p>
+            The Tower of Hanoi is a very popular problem in the realm of algorithms and it is the perfect example to see
+            how computer algorithms can also be used to solve real life fun problems.
+        </p>
+        <p>
+            Problem Statement – The Tower of Hanoi consists of three vertical towers and \(N\) disks of different sizes,
+            each shaped like a donut. The disks are originally stacked on top of each other in one of the towers in
+            order of decreasing size (largest disk at the bottom). The goal of the problem is to move all disks to a
+            different rod while keeping three rules in mind:
+        <ol>
+            <li>Only one disk can be moved at a time.</li>
+            <li>Only the disk at the top of a stack may be moved.</li>
+            <li>A disk may not be placed on top of a smaller disk.</li>
+        </ol>
+        </p>
+        <p>
+            Approach to solve the problem – We shall solve the problem by dividing it into sub problems. Let’s say the
+            original configuration of the disks is in Tower \(A\) and we need to move the disks to Tower \(C\) and Tower
+            \(B\) is
+            the auxiliary tower. The scenarios are as follows:
+        <ol>
+            <li>Single disk in Tower \(A\) – This is simple, just move the disk from Tower \(A\) to Tower \(C\) and
+                we’re done with
+                the solution.</li>
+            <li>Two disks in Tower \(A\) – Move the upper disk from \(A\) to \(B\), move the other, larger, disk from
+                \(A\) to \(C\) and
+                then move the disk in \(B\) to \(C\). We’re done.</li>
+            <li>Three disks in Tower \(A\) – Move the two upper disks from \(A\) to \(B\) using \(C\). How? Same method
+                as the one used
+                for two disks, but with the destination being \(B\). This will take 3 moves. Now, move the largest disk,
+                which is still in \(A\), to \(C\). Now, move the two disks in \(B\) to \(C\) using \(A\). How? Same
+                intuition as the first 3
+                steps in this case. We’re done. As you can see, we have used recursion of the two disks scenario twice
+                to solve the three disks scenario. Now, we generalise it to \(N\) disks.</li>
+            <li>\(N\) disks in Tower \(A\) – Move \(N-1\) disks from \(A\) to \(B\) using \(C\). Then, move the largest
+                disk in \(A\) to \(C\) and then,
+                move \(N-1\) disks from \(B\) to \(C\) using \(A\).</li>
+        </ol>
+        </p>
+        <p>
+            The code:
+        <pre>
+                <code>
+void tower_of_hanoi(int n, int A, int B, int C)
+{
+    // n => number of disks
+    // A => move from this tower
+    // B => move using this auxiliary tower
+    // C => move to this tower
+    if (n > 0)
+    {
+        tower_of_hanoi(n - 1, A, C, B);
+        printf("Move a disk from %d to %d", A, C);
+        tower_of_hanoi(n - 1, B, A, C);
+    }
+}; 
+                </code>
+                </pre>
+        </p>
+        <p>
+            From the code snippet, we can easily see that the total time taken would be \(T(n) = T(n-1)+1+T(n-1) =
+            2T(n-1)\). Let's call this equation 1.<br>
+            Putting \(n = n-1\) in equation 1, we get \(T(n-1) = 2T(n-2) + 1\). Let's call this equation 2.<br>
+            Putting \(n = n-2\) in equation 1, we get \(T(n-2) = 2T(n-3) + 1\). Let's call ths equation 3.<br>
+            Combining equation 2 and 3 by substituting value of \(T(n-2)\) from equation 2 in equation 3, we get:<br>
+            \(T(n-1) = 2T(2T(n-3) + 1) + 1\). Let's call this equation 4.<br>
+            Putting value of \(T(n-1)\) in equation 1 from equation 4, we get:<br>
+            \(T(n) = 2(2(2T(n-3) + 1) + 1) + 1 = 2^3 T(n-3) + 2^2 + 2^1 + 1\).<br>
+            We generalise this to the following:<br>
+            \(T(n) = 2^k T(n-k) + 2^{(k-1)} + 2^{(k-2)} + ... + 2^2 + 2^1 + 2^0\).<br>
+            Our base condition is: \(T(1) = 1\), so \(k=n-1\).<br>
+            Put \(k=n-1\) in the generalised equation and we get:<br>
+            \(T(n) = 2^{(n-1)} T(n-(n-1)) + 2^{(k-1)} + 2^{(k-2)} + ... + 2^2 + 2^1 + 2^0\).<br>
+            \(T(n) = 2^k (1) + 2^{(k-1)} + 2^{(k-2)} + ... + 2^2 + 2^1 + 2^0\).<br>
+            This is a Geometric Progression with \(r = 2\) and \(a = 1\).<br>
+            Sum of GP = \(a(1-r^n)/1-r\).<br>
+            Thus, \(T(n) = 1.(1-2^n)/(1-2) = 2^n – 1\).<br>
+            This means \(T(n) = O(2^n - 1)\) which gives us a time complexity of \(O(2^n)\).<br>
+        </p>
+        <p>
+            <center> <img src="../img/tower_of_hanoi.gif" style="  text-align: center;" width="759"></center>
+        </p>
+        <h1>
+            Applications in different fields:
+        </h1>
+        <p>
+            The Tower of Hanoi is a very common puzzle and is mainly used in psychological research on how people
+            approach
+            certain problems. Multiple variants of the Tower of Hanoi puzzle have been made solely for
+            neuropsychological
+            diagnosis (for example: frontal lobe deficits) and treatment of executive functions of the human body.
+        </p>
+        <p>
+            Jiajie Zhang and Donald Norman published a paper in Psychology which used different variants of the Tower of
+            Hanoi for empirical investigations into the principles of distributed representations. They came to multiple
+            conclusions about external representations of problem statements posed in the different isomorphs of the
+            Tower
+            of Hanoi puzzle. They also concluded the following: "The distributed representations approach has shed light
+            on
+            questions like whether cognition is solely in the mind or distributed across the mind and the environment
+            and
+            whether people reason on formal structures or on content-specific representations. Practically, it can
+            provide
+            design principles for effective representations." This paper has helped in the development of a framework
+            for
+            human-computer interaction.
+        </p>
+        <p>
+            It is also used as a scheme for data back up rotation which is essential in minimising the number of media
+            (like
+            tapes) used to back up data. Using the Tower of Hanoi scheme, the first tape backs up data once every 2
+            days,
+            the second tape backs up data once every 4 days, the third tape backs up data once every 8 days and so on.
+            Thus,
+            \(n\) tapes will allow backups for \(2^{n-1}\) days.
+        </p>
+        <p>
+            The most interesting application of the Tower of Hanoi was observed recently (in 2010), where researchers
+            found
+            out that an ant species \(Linepithema \ humile\) was able to solve the 3 disk Tower of Hanoi problem through
+            pheromone signals and non linear dynamics.
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

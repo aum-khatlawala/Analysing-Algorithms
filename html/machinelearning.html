@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<head>
+    <title>Machine Learning</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="matrixmultiplication.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Matrix
+            Multiplication</a>
+        <a href="towerofhanoi.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="huffmanencoding.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Huffman
+            Encoding</a>
+        <a href="hornformulas.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="editdistance.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="eggdropping.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Egg Dropping
+            Puzzle</a>
+        <a href="cryptography.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Basics of
+            Cryptography</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Machine Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <p>
+            One of the most exciting prospects in the realm of Computer Science is Machine Learning and Artificial
+            Intelligence. How does a computer become intelligent? It starts with huge amounts of data being fed into
+            computers. This data is somehow, over a considerable period of time, understood and learnt by the computer
+            and this is followed by the computer developing some kind of intelligence. Although this is a more than
+            simplified view of the whole process, it gives us a very basic understanding of the intuition behind the
+            whole process.<br>
+            Personally, the intermediate step of Machine Learning is the most intriguing. This, along with the high
+            involvement of algorithms in Machine Learning, gave me the perfect opportunity to write about the basics of
+            Machine Learning in this project.<br>
+            I want to provide a basic overview of ML algorithms in this part of my project.
+        </p>
+        <p>
+            Before we begin, there are three types of ML algorithms: supervised learning algorithms, unsupervised
+            learning algorithms and reinforcement learning algorithms.<br>
+            Supervised learning algorithms usually consist of independent variables as input and dependent variables as
+            output which are predicted from the input. The learning process continues until the model reaches a
+            particular level of accuracy.<br>
+            Unsupervised learning algorithms are usually used to cluster populations of variables / data in different
+            groups for multiple plausible reasons.<br>
+            Reinforcement learning algorithms are where the machine is exposed to a training environment where it
+            continually makes decisions using trial and error after learning from past decisions. This improves the
+            accuracy of its decision making.<br>
+            Now, let's move onto an overview of some of the algorithms:
+        <ol>
+            <li>
+                Linear Regression: This is an example of Supervised learning algorithms. Given a set of data points of
+                the dependent and independent variable, we try forming
+                an equation of the form \(Y = mX + c\) where \(Y\) is the dependent variable, \(m\) is the slope of the
+                line, \(X\) is the independent variable and \(c\) is the intercept. We derive the equation constants
+                \(m\) and \(c\) by minimising the sum of the squared difference of distance between the data points and
+                the regression line. This can be done as follows after reading the \(n\) data points: calculate four
+                kinds of sums - \(\sum X\), \(\sum x^2\), \(\sum Y\) and \(\sum XY\). Then, calculate \(m\) by using the
+                formula \(m = (n \times \sum XY - \sum X \times \sum Y) / (n \times \sum X^2 - \sum X \times \sum X)\)
+                and
+                \(c\) by using the formula \((\sum Y - m \times \sum X)/n\).
+            </li>
+            <li>
+                Decision Tree: This is also an example of Supervised learning algorithms. In this algorithm, we look at
+                some independent data points and classify them into two or
+                more homogeneous sets. The main task is to make these sets as distinct as possible. There are two types
+                of Decision Trees: categorical variable tree (definitive yes or no answers make up the tree. Ex: Will a
+                person eat non vegetarian food?) and continuous variable tree (range of answers make up different sets
+                in the tree. Ex: Human height). Let's look at one algorithm used for making Decision Trees called Gini
+                algorithm: Let's say we have two input variables, gender and class, and we want to see which split would
+                produce more homogeneous sub nodes for people that play cricket. Gini tells us to find the sum of
+                squares of probability of success (\(p\)) and failure (\(q = 1-p\)) for the first proposed partition and
+                calculate the weighted Gini score for it. Do the same for the second proposed partition and the
+                partition with higher Gini score is the better way to partition the data points. For example, if the
+                data given to you is the following:
+                <ol>
+                    <li>
+                        There are 30 students. 10 females and 20 males. 14 \(9^{th}\) graders and 16 \(10^{th}\)
+                        graders.
+                    </li>
+                    <li>
+                        2 females play cricket (0.2) and 13 males play cricket (0.65). 6 \(9^{th}\) graders play cricket
+                        (0.43) and 9 \(10^{th}\) graders play cricket (0.56).
+                    </li>
+                </ol>
+                We need to find whether a split on gender would be better or a split on class would be better.<br>
+                For split on gender;
+                <ol>
+                    <li>
+                        Gini for sub node females = (0.2)*(0.2) + (0.8)*(0.8) = 0.68
+                    </li>
+                    <li>
+                        Gini for sub node males = (0.65)*(0.65) + (0.35)*(0.35) = 0.55
+                    </li>
+                    <li>
+                        Calculated weighted Gini score = (10/30)*0.68 + (20/30)*0.55 = 0.59
+                    </li>
+                </ol>
+                For split on class;
+                <ol>
+                    <li>
+                        Gini for sub node \(9^{th}\) graders = (0.43)*(0.43) + (0.57)*(0.57) = 0.51
+                    </li>
+                    <li>
+                        Gini for sub node \(10^{th}\) graders = (0.56)*(0.56) + (0.44)*(0.44) = 0.51
+                    </li>
+                    <li>
+                        Calculated weighted Gini score = (14/30)*0.51 + (16/30)*0.51 = 0.51
+                    </li>
+                </ol>
+                We can see that the Gini score for split on gender is more favourable, so we make the node split based
+                on gender.
+            </li>
+            <li>
+                K-means Clustering: This is one of the most widely used unsupervised ML algorithms. The objective of
+                this algorithm is to group similar data points together and discover underlying patterns. To solve this,
+                the algorithm searches for a fixed number of clusters (\(k\)) (cluster - collection of data points based
+                on certain similarities) in a dataset. The algorithm gets its name because it finds \(k\) centroids in
+                its approach. Essentially, what this algorithm does is given a set of data points, it divides the graph
+                into multiple clusters by finding centroids for each cluster. A python library that can perform the task
+                of finding the centroid is sklearn.cluster. However, if the data cannot be clustered efficiently, the
+                data points need to be converted into points of a higher dimensions. Another approach of the algorithm
+                is to generate \(k\) random centroids and assign each data point to its nearest centroid (by finding
+                minimum Euclidean distance). After clustering all data points using the last step, we gather all points
+                of a particular cluster and identify the actual centroid by taking the average of all points assigned to
+                that cluster. We repeat this for all clusters. Now, we keep repeating the two previous steps until
+                convergence is reached. One amazing application of K-Means clustering is to help an ecommerce giant like
+                Samsung decide where it should open new stores in such a way that not too many stores are opened close
+                to each other and the stores are not too far apart (for sales coverage reasons). Using the database
+                which contains information about all the clients, Samsung can easily solve this problem using K-means
+                clustering.
+            </li>
+        </ol>
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

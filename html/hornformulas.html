@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+<head>
+    <title>Horn Formulas</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="matrixmultiplication.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Matrix
+            Multiplication</a>
+        <a href="towerofhanoi.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="huffmanencoding.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Huffman
+            Encoding</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="editdistance.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="eggdropping.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Egg Dropping
+            Puzzle</a>
+        <a href="cryptography.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Basics of
+            Cryptography</a>
+        <a href="machinelearning.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Machine
+            Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <h1>
+            My interpretation and analysis of the algorithm:
+        </h1>
+        <p>
+            The whole concept of Horn Formulas and prolog (programming by logic) came from the need for computers to
+            display some level of logical reasoning similar to us humans. Horn Formulas are a way to derive logical
+            conclusions based on certain facts and rules provided to it. Let’s understand the basics of Horn Formulas by
+            taking the example where the Horn Formula is a Boolean variable – it takes either true or false as a value.
+        </p>
+        <p>
+            Imagine the murder of a high ranking military general took place at his house.<br>
+            Let variables \(u, v, w, x, y \ and \ z\) denote the following statements:
+        <ul>
+            <li>\(u\)→the colonel is innocent</li>
+            <li>\(v\)→the wife is innocent</li>
+            <li>\(w\)→the murder took place at 8 pm</li>
+            <li>\(x\)→the murder took place in the kitchen</li>
+            <li>\(y\)→the butler is innocent</li>
+            <li>\(z\)→the colonel was asleep at 8 pm</li>
+        </ul>
+        </p>
+        <p>
+            We will call a variable \(x\) or its negation \(x'\) a literal. We have two kinds of clauses in Horn
+            Formulas:
+        <ol>
+            <li>Implications – These clauses are of the form "If the conditions on the LHS hold, the conditions on the
+                RHS must also be true by implication". Two examples from the example scenario: "\((z∧w) ⇒ u\)" means "if
+                the
+                colonel was asleep at 8 pm and the murder took place at 8 pm, the colonel is innocent." "\(⇒ x\)" is a
+                degenerate type of implication which means "the murder took place in the kitchen". Implications lead us
+                to setting some variables to true.</li>
+            <li>Pure negative clauses – These clauses contain an OR of any number of negative literals. For example,
+                "\((u’∨v’∨y’)\)" means "all three suspects can’t be innocent". Pure negative clauses lead us to setting
+                some
+                variables to false.</li>
+        </ol>
+        </p>
+        <p>
+            Now that we have understood the basic terminology with the help of an example, we move onto the
+            technicalities. Our goal is to determine whether we can assign either true or false values to the variable
+            that satisfies all the clauses. This is called the satisfying assignment.
+        </p>
+        <p>
+            Strategy to solve Horn Formulas:
+        <ol>
+            <li>
+                Set all variables to false.
+            </li>
+            <li>
+                Set some variables to true very carefully keeping implications in mind. While there is an implication
+                that is not satisfied, set the variable on the RHS to true.
+            </li>
+            <li>
+                Look at the negative clauses left and make sure the pure negative clauses are satisfied. If yes, we have
+                a satisfying assignment. If no, the formula provided does not have a satisfying argument.
+            </li>
+        </ol>
+        </p>
+        <p>
+            Now, we can show that this solution uses a Greedy approach to test for satisfying assignments because the
+            two properties for Greedy Approach are satisfied in the 2nd phase of the algorithm – the first and third
+            phase of the strategy are only for setting and checking. The two properties are as follows:
+        <ol>
+            <li>
+                Greedy Choice Property – We do know the first step towards the optimum solution. Set the first variable
+                with the implication clause to true.</li>
+            <li>Optimum Substructure Property – Once the first-step is taken, can we restate the rest of the problem as
+                a smaller version of the original problem and thus, solve using recursion? Yes. The global final answer
+                has to be built from the local answers for each implication.</li>
+        </ol>
+        </p>
+        <p>
+            Now, why is the strategy correct? Because, if the strategy returns an assignment, this assignment satisfies
+            both the implications and the negative clauses and is thus a valid satisfying assignment of the Horn
+            Formula. Now, we need to convince ourselves that if the strategy doesn’t return a satisfying assignment,
+            there isn’t one anyways. This is due to the fact that if a certain set of variables is set to true, then
+            they must be true in any satisfying assignment. Thus, if the truth assignment found after the 2nd phase
+            doesn’t satisfy the negative clauses, there is no satisfying assignment.
+        </p>
+        <p>
+            The structure of the code:
+        <pre>
+                <code>
+void horn_formulas(char* formula)
+{
+    // apply regex to the formula and set all variables to false
+    
+    // while there is an implication that is not satisfied:
+    //      set the RHS variable of the implication to true
+
+    // if all pure negative clauses are satisfied:
+    //    return the assignment
+    // else:
+    //      return ("Formula is not satisfiable");
+};
+                </code>
+                </pre>
+        </p>
+        <p>
+            Let’s take an example dry run to understand this better. <br>
+            Input: \((w∧y∧z) ⇒ x, (x∧z) ⇒ w, x ⇒ y, ⇒ x, (x∧y) ⇒ w, (w’∨x’∨y’), (z’)\). <br>
+            Process: <br>
+            First, set all variables \(w, x, y, z\) to false.
+            Then,
+        <ol>
+            <li>
+                set \(x\) to true because \(“⇒ x”\).
+            </li>
+            <li>set \(y\) to true because \(“x ⇒ y”\).</li>
+            <li>set \(w\) to true because \(“(x∧y) ⇒ w”\).</li>
+        </ol>
+        Now, looking at the pure negative clauses, we see that the first one is not satisfied.<br>
+        Output: Formula is not satisfiable.
+        </p>
+        <h1>
+            Applications in different fields:
+        </h1>
+        <p>
+            It is easy to see why Horn Formulas might be used in multiple fields. We provide a set of rules and it
+            outputs a
+            statement that satisfies the rules. It is an important part of Logic Programming which is used extensively
+            in
+            Computer Science because first order logic (set of axioms / rules) is well understood and can represent all
+            computational problems.
+        </p>
+        <p>
+            Horn Formulas play a major role in various branches of Computer Science like Data Science, Machine Learning
+            and
+            so on. Why so? Universal Horn theories (set of Horn clauses) are exactly the framework in which the notion
+            of
+            any generic example can be applied. Horn Formulas are an improvement on the initial models used in logic
+            programming and this is why Horn Theory is so popular.
+        </p>
+        <p>
+            Since Horn Formulas are a special kind of Syntactic Unification (solving equations between symbolic
+            expressions), they can be used in multiple areas of Computer Science that use Syntactic Unification. Some of
+            these include: Theorem Proving, Natural Language Processing, Pattern matching, Scientific calculators,
+            Expert
+            Systems, Parsing and Query Languages.
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

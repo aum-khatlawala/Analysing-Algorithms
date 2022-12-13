@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<head>
+    <title>Basics of Cryptography</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="matrixmultiplication.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Matrix
+            Multiplication</a>
+        <a href="towerofhanoi.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="huffmanencoding.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Huffman
+            Encoding</a>
+        <a href="hornformulas.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="editdistance.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="eggdropping.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Egg Dropping
+            Puzzle</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Basics of Cryptography</a>
+        <a href="machinelearning.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Machine
+            Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <p>
+            We shall talk about the basics of encryption. Encryption is a method of converting data into an
+            undecipherable format so that only the authorized parties can access the information. Cryptographic keys are
+            used along with encryption algorithms to make the process of encryption possible.
+        </p>
+        <p>
+            There are two types of encryption methods based on the way the cryptographic keys are applied – Symmetric
+            encryption (aka private key encryption) and Asymmetric encryption (aka public key encryption).
+        </p>
+        <p>
+            First, let’s talk about Symmetric Encryption. As the name implies, it uses a single cryptographic key to
+            encrypt and decrypt data. The most primitive use of Symmetric Encryption was proposed by Julius Caesar
+            (Caesar’s cipher). Let’s imagine a situation where Alice wants to send an encrypted message to Bob using
+            this protocol but wants to make sure that an eavesdropper, Eve, can’t decipher the message. To do this,
+            Alice and Bob meet up beforehand and choose a secret codebook with rules for deciphering the encrypted
+            message. Let’s say that the codebook is very straightforward and has the only rule as "each letter in the
+            encrypted message is replaced by a letter 10 positions down the alphabet". Now, using this, if Alice sends a
+            message to Bob, Eve will only be able to decipher the message by partially using some encoded messages to
+            figure out the codebook. Although this was a simple example, it helps in giving us the basic understanding.
+        </p>
+        <p>
+            We shall talk about one kind of Symmetric Encryption scheme called the one-time pad. In this scheme, Alice
+            and Bob meet up beforehand and select a string \(r\) of the same length as the message Alice plans to send
+            later
+            on.<br>
+            Now, to encrypt the message, Alice takes a bitwise XOR of each bit in the message with the corresponding
+            bit in the string \(r\). Let’s say the message she wants to send is 11110000 and the string \(r\) is
+            01110010.<br>
+            The
+            encryption function will work as follows: \(e(x) = x⊕r\) = 11110000⊕01110010 = 10000010. Now, the reason
+            this
+            works is because if we apply the encryption function again, we get the original message.<br>
+            How? \(e(e(x)) =
+            (x⊕r)⊕r = x⊕(r⊕r) = x⊕0’ = x\) (where 0’ is a string of all zeros with the same length as \(r\) and thus,
+            the same
+            length as \(x\)). Therefore, to decrypt, Bob just needs to apply the encryption function to the encoded
+            message.<br>
+            Now, how will this stop Eve from intercepting the message? Simple. Bob and Alice should pick \(r\) at random
+            in
+            such a way that the resulting string is equally likely to be an element of \(\{ 0,1 \}^n\). This will ensure
+            that if
+            Eve intercepts the message, she gets no information about \(x\).<br>
+            Let’s understand with an example. If Eve
+            finds
+            out that the encrypted message is 10, she won’t be able to deduce \(x\) because \(r\) could be designed for
+            any 2
+            bit binary \(x\) string (00, 01, 10 and 11) because 00⊕10=10, 01⊕11=10, 10⊕00=10 and 11⊕01=10. Thus, there
+            are
+            multiple possible options for \(x\) if one only knows its encoded message.<br>
+            The downside of the one-time pad is that it has to be discarded after one use – this is how it gets its
+            name. This is because if Eve intercepts two encoded messages – \(x⊕r\) and \(z⊕r\) – for the two messages
+            \(x\) and \(z\),
+            she could take the bitwise XOR of the two encoded messages to get \(x⊕z\), which might give her important
+            information like – do the two messages begin or end the same (due to XOR properties) and if one message
+            contains a long sequence of 0s, the corresponding part of the other message could be exposed (\(b⊕0=b\)
+            where \(b\)
+            is either 0 or 1).
+        </p>
+        <p>
+            Now, if Alice and Bob agree on a shared 128 bit random string r and it specifies a bijection from 128 bit
+            strings to 128 bit strings along with the property that the encryption function can be used multiple times,
+            then this kind of Symmetric Encryption scheme is called the Advanced Encryption Standard (AES). The only way
+            to break the code of encryption at present is through brute force approach and that makes it highly unlikely
+            to break the code if the shared random string r is selected correctly.
+        </p>
+        <p>
+            Now, we move onto Asymmetric Encryption. Consider the example we talked about at the start. If Bob wants to
+            communicate with hundreds of people securely using the private key encryption protocol, it wouldn’t be too
+            practical as he would have to maintain a detailed list of which key corresponds to whom. To resolve this
+            issue, the concept of public key encryption was introduced. In this scheme, Bob gives a public key to
+            everyone who sends him messages and keeps a private key to himself. The encryption is done through the
+            public key and the decryption is done through the private key.
+        </p>
+        <p>
+            For public key encryption, we want a representation which can be encrypted fast but which has slow / almost
+            impossible public key decryption and fast private key decryption. To enable this kind of public key
+            encryption, an ingenious protocol called the Rivest, Shamir and Adleman (RSA) algorithm was formulated.
+        </p>
+        <p>
+            The RSA algorithm relies heavily on number theory. Think of the message that you want to send as numbers
+            modulo \(N\) where messages larger than \(N\) can be broken into smaller pieces. The encryption function
+            will be a
+            one to one and onto mapping on \(\{ 0, … N-1 \}\) and the decryption function will be the inverse mapping.
+            Now, we
+            move onto the two essential properties for the RSA algorithm. Pick two primes \(p\) and \(q\) such that
+            \(pq=N\). For
+            any \(e\) relatively prime to \((p-1)(q-1)\):
+        <ol>
+            <li>
+                The mapping \(x→x^e \mod N\) is a bijection on \(\{ 0, … N-1 \}\). <br>
+                This property tells us that the mapping is a reasonable mapping for the encoding process of the message
+                \(x\), since no information is lost. Using this property, Bob can publish \((N, e)\) as his public key.
+            </li>
+            <li>
+                Let \(d\) be the inverse of \(e \mod (p-1)(q-1)\). Then for all \(x∈ \{ 0, … N-1 \}, (x^e)^d ≡ x \mod
+                N\). <br>
+                This property tells us how decryption can be achieved. The secret key, \(d\), can be retained by Bob and
+                he
+                can simply use the formula given to decode his message.
+            </li>
+        </ol>
+        </p>
+        <p>
+            Before moving onto the proof of the properties, let’s look at an example of the RSA scheme:
+            Let \(N\) = 39 = 3 · 13. Choose \(e\) = 5 since it is relatively prime to 24 (= (3-1)·(13-1)). The
+            decryption
+            exponent is then the inverse of (\(5 \mod 24\)) = 29 (because (5·29) mod 24 = 1). This can be computed using
+            the
+            Extended Euclid’s Algorithm. Thus, for any message \(x \mod 39\), the encryption of \(x\) is \(y = x^5 \mod
+            39\) and the
+            decryption of \(y\) is \(x = y^{29} \mod 39\). For example, if \(x\) = 11, \(y = 11^5 \mod 39\) = 20 and
+            \(x\) = 11 = \(20^{29} \mod 39\).
+        </p>
+        <p>
+            Proof of the two properties:<br>
+            If the mapping \(x→x^e \mod N\) is invertible, it must be a bijection. Thus, the second property implies the
+            first property. We prove the second property. \(E\) is invertible modulo \((p-1)(q-1)\) because it is
+            relatively
+            prime to that number. Now, we examine the equation \((x^e)^d ≡ x \mod N\). We observe that since \(ed ≡ 1
+            \mod
+            (p−1)(q−1)\) (property of modulo inverse), \(ed = 1+ k(p-1)(q-1)\) for some value of \(k\). Now we need to
+            show that
+            the difference \((x^e)^d – x = x^{(1+ k(p-1)(q-1))} – x\) is always \(0 \mod N\). Now, we use Fermat’s Little
+            Theorem.
+            It states that if \(p\) is a prime, then for every \(1 \leq a \leq p\), \(a^{(p-1)} ≡ 1 (\mod p)\).
+            The second form of the equation is divisible by \(p\) (since \(x^{p-1}≡ 1 (\mod p)\)) and likewise by \(q\).
+            Since \(p\) and
+            \(q\) are primes, it must also be divisible by \(N\) (their product). Thus, \(x^{(1+ k(p-1)(q-1))} – x ≡ 0
+            (\mod N)\). This
+            completes our proof.
+        </p>
+        <p>
+            Now, we will show how secure this scheme is: <br>
+            The claim is as follows: Given \(N\), \(e\) and \(y = x^e \mod N\), it is computationally intractable to
+            determine \(x\).
+            Why? Two reasons:
+        <ol>
+            <li>
+                Finding \(x\) would require the brute force method of checking whether \(x^e ≡ y \mod N\) and this would
+                take
+                exponential time.
+            </li>
+            <li>
+                Factoring \(N\) to retrieve \(p\) and \(q\) and then figuring out d using the Extended Euclid’s
+                Algorithm would be a
+                very hard process because factoring is assumed and proven to be hard.
+            </li>
+        </ol>
+        Thus, intractability is what the RSA scheme takes advantage of to remain secure.
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

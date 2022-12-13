@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<head>
+    <title>Egg Dropping Puzzle</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Home</a>
+        <a href="matrixmultiplication.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Matrix
+            Multiplication</a>
+        <a href="towerofhanoi.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Tower of Hanoi</a>
+        <a href="huffmanencoding.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Huffman
+            Encoding</a>
+        <a href="hornformulas.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Horn Formulas</a>
+        <a href="editdistance.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Edit Distance</a>
+        <a href="#" class="active" style="color:royalblue" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">Egg Dropping Puzzle</a>
+        <a href="cryptography.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Basics of
+            Cryptography</a>
+        <a href="machinelearning.html" onmouseover="changecolour(this)" onmouseout="colourchange(this)">Machine
+            Learning</a>
+        <a href="javascript:void(0);" class="icon" onclick="maketopnavresponsive()" onmouseover="changecolour(this)"
+            onmouseout="colourchange(this)">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div id='content'>
+        <h1>
+            My interpretation and analysis of the algorithm:
+        </h1>
+        <p>
+            The puzzle is as follows:<br>
+            Imagine there are 2 eggs and a building with 100 floors and we want to know which stories of the building
+            are
+            safe to drop eggs from. What is the least number of egg droppings that will help us find the answer to the
+            question?<br>
+            We make a few assumptions:
+        <ol>
+            <li>
+                If an egg survives the fall, it can be used again.
+            </li>
+            <li>
+                A broken egg is discarded.
+            </li>
+            <li>
+                All eggs are identical in terms of effect of a fall.
+            </li>
+            <li>
+                If an egg breaks on the \(i^{th}\) floor, it'll break from all floors above the \(i^{th}\) floor.
+            </li>
+            <li>
+                If an egg doesn't break on the \(i^{th}\) floor, it won't break on a floor lesser than the \(i^{th}\)
+                floor.
+            </li>
+            <li>
+                No assumptions are made about either the \(1^{st}\) floor or the \(100^{th}\) floor.
+            </li>
+        </ol>
+        </p>
+        <p>
+            Before we move onto understanding the solution, let's look at a property of this puzzle that will help us
+            understand the approach easily.<br>
+            This is the Optimal Substructure Property:
+        <ol>
+            <li>
+                If the egg breaks after dropping from the \(x^{th}\) floor, then we only need to check the lower floors
+                with the remaining eggs. Therefore, the problem reduces to \(x-1\) floors and \(n-1\) eggs.
+            </li>
+            <li>
+                If the egg doesn't break after dropping from the \(x^{th}\) floor, then we only need to check for higher
+                floors. Therefore, the problem reduces to \(k-x\) floors and \(n\) eggs.
+            </li>
+        </ol>
+        We proceed keeping these two properties in mind and also keeping in mind that we have to deal with the worst
+        case scenario at every stage and then find the minimum possible number of trials. So the problem can be
+        remodeled as follows:
+        \[egg\_drop(n, k) = 1 + \min \{ \max(egg\_drop(n-1, x-1), egg\_drop(n, k-x)) \}\]
+        </p>
+        <p>
+            If we try solving the problem using recursion, the approach would be as follows:<br>
+            Let's say we have two eggs and two floors. Let's try throwing the egg from the first floor.<br>
+            We have two cases:
+        <ol>
+            <li>
+                If the egg breaks from the first floor, then the first floor is the threshold floor. So, the egg needs
+                to be dropped from 0 floors to minimise the total number of trials.
+            </li>
+            <li>
+                If the egg doesn't break from the first floor, then we only need to test the second floor to get the
+                answer. So, the answer becomes 1.
+            </li>
+        </ol>
+        Thus, for the first floor, \(egg\_drop(2, 1) = 1 + \max(0, 1) = 2\).<br>
+        Now, if we try throwing from the second floor, we have two cases:
+        <ol>
+            <li>
+                If the egg breaks from the second floor, then we will have 1 egg and 1 floor (second floor) to find the
+                threshold.
+            </li>
+            <li>
+                If the egg doesn't break from the second floor, then the egg needs to be dropped from 0 floors to
+                minimise the number of trials (because there are only 2 floors).
+            </li>
+        </ol>
+        Thus, for the second floor, \(egg\_drop(2, 2) = 1 + \max(1, 0) = 2\).<br>
+        Thus, the total answer is 2 as it is the minimum value from 2 and 2.
+        </p>
+        <p>
+            This was the recursive method of solving the problem. But if we try to visualise this approach for higher
+            number of floors, we realise that there are many values in the recursion tree being computed multiple times.
+            This means there is an Overlapping Subproblem Property to this problem too. This increases the time
+            complexity of the recursive algorithm to exponential time. We can solve this hurdle by using memoisation in
+            a Dynamic Programming approach.
+        </p>
+        <p>
+            The approach will be to maintain a matrix / table with the results of all subproblems as and when we
+            calculate the answer to a subproblem. For example, to fill the \((i,j)^{th}\) entry of the matrix (where
+            \(i\) is the number of eggs and \(j\) is the number of floors for that subproblem), we traverse for each
+            floor \(x\) from 1 to \(j\) and find the minimum of the following expression: \((1 + \max( matrix[i-1][j-1],
+            matrix[i][j-x]))\).
+        </p>
+        <p>
+            It is best to understand this by visualising the matrix.<br>
+            Let's say we have 2 eggs and 6 floors. The matrix will be as follows (with each row corresponding to an egg
+            and each column corresponding to a floor):
+            \[\begin{bmatrix} 1 & 2 & 3 & 4 & 5 & 6 \\ 1 & 2 & 2 & 3 & 3 & 3 \end{bmatrix}\]
+            How do we get this?<br>
+            The first row is straight forward to fill as for one egg, the minimum number of attempts
+            to find out from which floor the egg will break (in the worst case scenario) is the number of floors
+            itself.<br>
+            It gets trickier for 2 floors. Let's go through it step by step.<br>
+            For 2 eggs and 1 floor, the number of eggs is more than number of floors, it doesn't help and we just copy
+            the value given in 1 egg and 1 floor entry.<br>
+            For 2 eggs and 2 floors, I have explained the reasoning earlier. The answer is 2.<br>
+            For 2 eggs and 3 floors;<br>
+            if we drop from first floor and it breaks, we have 0 as the answer. If it doesn't break, we have 2 floors
+            and 1 egg to work with. To find this, we refer to the \((1,2)^{th}\) entry of the matrix and see the answer
+            is 2. So, \(1+\max(0,2) = 3\).<br>
+            if we drop from the second floor and it breaks, we have 1 floor and 1 egg to work with, so the answer is 1
+            (\((1,1)^{th}\) entry). If it doesn't break, we have 1 floor and 2 eggs to work with, so the answer from the
+            matrix is 1.
+            So, \(1+\max(1,1) = 2\).<br>
+            if we drop from the third floor and it breaks, we have 2 floors and 1 egg to work with, so the answer is 2.
+            If it doesn't break, we have 0 as the answer. So, \(1+\max(2,0) = 3\).<br>
+            So the \((2,3)^{th}\) entry is \(\min(3, 2, 3) = 2\).<br>
+            For 2 eggs and 4 floors;<br>
+            Dropping from the first floor \(\rightarrow\) Egg breaks \(\rightarrow\) 0 and if egg doesn't break
+            \(\rightarrow\) 3 floors and 2 eggs to work with \(\rightarrow\) 2. So, \(1+\max(0,2) = 3\).<br>
+            Dropping from the second floor \(\rightarrow\) Egg breaks \(\rightarrow\) 1 floor and 1 egg to work with
+            \(\rightarrow\) 1 and if egg doesn't break \(\rightarrow\) 2 floors and 2 eggs to work with \(\rightarrow\)
+            2. So, \(1+\max(1,2) = 3\).<br>
+            Dropping from the third floor \(\rightarrow\) Egg breaks \(\rightarrow\) 2 floors and 1 egg to work with
+            \(\rightarrow\) 2 and if egg doesn't break \(\rightarrow\) 1 floor and 2 eggs to work with \(\rightarrow\)
+            1. So, \(1+\max(2,1) = 3\).<br>
+            Dropping from the fourth floor \(\rightarrow\) Egg breaks \(\rightarrow\) 3 floors and 1 egg to work with
+            \(\rightarrow\) 3 and if egg doesn't break \(\rightarrow\) 0. So, \(1+\max(3,0) = 4\).<br>
+            So the \((2,4)^{th}\) entry is \(\min(3, 3, 3, 4) = 3\).<br>
+            For 2 eggs and 5 floors;<br>
+            1 \(\rightarrow\) breaks \(\rightarrow\) 0 and doesn't break \(\rightarrow\) 4 floors and 2 eggs
+            \(\rightarrow\) 3. So, \(1+\max(0,3) = 4\).<br>
+            2 \(\rightarrow\) breaks \(\rightarrow\) 1 floor and 1 egg \(\rightarrow\) 1 and doesn't break
+            \(\rightarrow\) 3 floors and 2 eggs \(\rightarrow\) 2. So, \(1+\max(1,2) = 3\).<br>
+            3 \(\rightarrow\) breaks \(\rightarrow\) 2 floors and 1 egg \(\rightarrow\) 2 and doesn't break
+            \(\rightarrow\) 2 floors and 2 eggs \(\rightarrow\) 2. So, \(1+\max(2,2) = 3\).<br>
+            4 \(\rightarrow\) breaks \(\rightarrow\) 3 floors and 1 egg \(\rightarrow\) 3 and doesn't break
+            \(\rightarrow\) 1 floor and 2 eggs \(\rightarrow\) 1. So, \(1+\max(3,1) = 4\).<br>
+            5 \(\rightarrow\) breaks \(\rightarrow\) 4 floors and 1 egg \(\rightarrow\) 4 and doesn't break
+            \(\rightarrow\) 0. So, \(1+\max(4,0) = 5\).<br>
+            So the \((2,5)^{th}\) entry is \(\min(4, 3, 3, 4, 5) = 3\).<br>
+            For 2 eggs and 6 floors;<br>
+            1 \(\rightarrow\) breaks \(\rightarrow\) 0 and doesn't break \(\rightarrow\) 5 floors and 2 eggs
+            \(\rightarrow\) 3. So, \(1+\max(0,3) = 4\).<br>
+            2 \(\rightarrow\) breaks \(\rightarrow\) 1 floor and 1 egg \(\rightarrow\) 1 and doesn't break
+            \(\rightarrow\) 4 floors and 2 eggs \(\rightarrow\) 3. So, \(1+\max(1,3) = 4\).<br>
+            3 \(\rightarrow\) breaks \(\rightarrow\) 2 floors and 1 egg \(\rightarrow\) 2 and doesn't break
+            \(\rightarrow\) 3 floors and 2 eggs \(\rightarrow\) 2. So, \(1+\max(2,2) = 3\).<br>
+            4 \(\rightarrow\) breaks \(\rightarrow\) 3 floors and 1 egg \(\rightarrow\) 3 and doesn't break
+            \(\rightarrow\) 2 floors and 2 eggs \(\rightarrow\) 2. So, \(1+\max(3,2) = 4\).<br>
+            5 \(\rightarrow\) breaks \(\rightarrow\) 4 floors and 1 egg \(\rightarrow\) 4 and doesn't break
+            \(\rightarrow\) 1 floor and 2 eggs \(\rightarrow\) 1. So, \(1+\max(4,1) = 5\).<br>
+            6 \(\rightarrow\) breaks \(\rightarrow\) 5 floors and 1 egg \(\rightarrow\) 5 and doesn't break
+            \(\rightarrow\) 0. So, \(1+\max(5,0) = 6\).<br>
+            So the \((2,5)^{th}\) entry is \(\min(4, 4, 3, 4, 5, 6) = 3\).<br>
+        </p>
+        <p>
+            The code:
+        <pre>
+                <code>
+int egg_drop(int n, int k)
+{
+    // n = eggs
+    // k = floors
+    int matrix[n + 1][k + 1];
+    for (int j = 1; j <= k; j++)
+    {
+        matrix[1][j] = j;
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        matrix[i][0] = 0;
+        matrix[i][1] = 1;
+    }
+    int i_j_entry_candidate;
+    for (int i = 2; i <= n; i++)
+    {
+        for (int j = 2; j <= k; j++)
+        {
+            matrix[i][j] = 9999;
+            for (int x = 1; x <= j; x++)
+            {
+                i_j_entry_candidate = 1 + max(matrix[i - 1][x - 1], matrix[i][j - x]);
+                if (i_j_entry_candidate < matrix[i][j])
+                {
+                    matrix[i][j] = i_j_entry_candidate;
+                }
+            }
+        }
+    }
+    return matrix[n][k];
+}
+                </code>
+                </pre>
+        </p>
+        <h1>
+            Applications in different fields:
+        </h1>
+        <p>
+            There aren't too many applications of the Egg Dropping Puzzle except in Psychological studies and a few
+            other domains. It is similar to the Tower of Hanoi problem in terms of both being puzzles but it isn't as
+            famous as the Tower of Hanoi problem.
+        </p>
+        <p>
+            The Egg Dropping puzzle, however, is a very interesting puzzle and is thus used for many cognitive ability
+            tests and it is also an interview question for Computer Science students.
+        </p>
+    </div>
+    <script src="../js/script_nav.js "></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

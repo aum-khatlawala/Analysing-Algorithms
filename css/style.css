@@ -1,0 +1,257 @@
+/*General*/
+/*@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+@font-face {
+    font-family: 'Bungee Inline';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/bungeeinline/v6/Gg8zN58UcgnlCweMrih332VuPGV_-Q.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+*/
+* {
+    font-size: 30px;
+    /*font-family: 'Montserrat', sans-serif;*/
+    color: whitesmoke;
+    text-align: justify;
+}
+
+@keyframes bgcolor {
+    0% {
+        background-color: rgb(172, 13, 172)
+    }
+
+    50% {
+        background-color: blue
+    }
+
+    100% {
+        background-color: rgb(172, 13, 172)
+    }
+}
+
+body {
+    -webkit-animation: bgcolor 20s infinite;
+    animation: bgcolor 10s infinite;
+    -webkit-animation-direction: alternate;
+    animation-direction: alternate;
+}
+
+.active {
+    color: rgb(255, 107, 181);
+}
+
+.topnav {
+    background-color:black;
+    overflow: hidden;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    color: blueviolet;
+    text-decoration: underline;
+}
+
+.topnav .icon {
+    display:none;
+}
+
+
+/*Media queries*/
+
+
+/* When the screen is less than 600 pixels wide, hide all links,
+except for the active one.
+The icon opens and closes the topnav
+Not required, only for optimisation */
+
+@media screen and (max-width: 600px) {
+    .topnav a:not(.active) {
+        display: none;
+    }
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .topnav.responsive {
+        overflow: hidden;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    .topnav.responsive a.icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .topnav.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+}
+
+
+/*STICKY: When navbar reaches its scroll position, be sticky */
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+
+.sticky+.content {
+    padding-top: 60px;
+}
+
+
+/*Top fixed nav bar end*/
+
+
+/* For the footer*/
+
+.footer {
+    /*background-color:black;*/
+    color: white;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: -200;
+    margin-right: 0;
+    margin-left: 0;
+    text-align: center;
+}
+
+#content {
+    opacity: 1.5;
+    margin: 30px;
+    margin-top: 60px;
+    padding: 20px;
+    border-radius:0rem;
+}
+
+
+/*Footer end*/
+
+
+/*for the TABLES*/
+
+table,
+thead,
+td {
+    border-collapse: collapse;
+}
+
+.achiev table {
+    background-color:transparent;
+}
+
+.achiev thead {
+    background-color:yellow;
+}
+
+.achiev td {
+    border: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    padding: 10px
+}
+
+.achiev th {
+    border: 1px solid black;
+    padding: 5px
+}
+
+.achiev table {
+    border: 0px solid black;
+}
+
+.interest_table th {
+    margin: 2px;
+    text-align: justify;
+    font-weight: bold;
+    width: 20%;
+}
+
+.interest_table table {
+    width: 100%
+}
+
+.items {
+    margin: 1px;
+    box-shadow: 1px 1px rgb(255, 107, 181, .15);
+    height: 40px;
+}
+
+.items:not(.active_1):hover {
+    background-color: lightyellow;
+}
+
+.active_1 {
+    background-color: yellow;
+}
+
+.non_active {
+    background-color:whitesmoke;
+}
+
+
+/*Tables end*/
+
+/*For the images*/
+
+img {
+    width: 50%;
+    border-radius: 5px;
+}
+
+#logo {
+    width: 20px;
+    background: white;
+    margin-left: 3px;
+}
+
+/*Images end*/
+/*Text customisation*/
+
+h1 {
+    font-size: 20px;
+}
+
+.footer a {
+    color:whitesmoke;
+    text-decoration:none;
+}
+
+a {
+    color: rgb(50, 33, 66);
+    text-decoration: none;
+}
+
+/*Text end*/
